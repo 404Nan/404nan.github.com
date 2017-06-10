@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>js作用域链与闭包 | let&#39;s go</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+      <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/js/google-code-prettify/tomorrow-night-eighties.min.css">
+
+  </head>
+
+  <body>
+
+<header>
+	<a id="logo" href="/" title="let&#39;s go">
+	<img src="/favicon.png" alt="let&#39;s go"></a>
+	
+	
+		<!--搜索栏-->
+		<i class="js-toggle-search iconfont icon-search"></i>
+
+
+<form class="js-search search-form search-form--modal" method="get" action="http://gushi.li" role="search">
+	<div class="search-form__inner">
+		<div>
+			<i class="iconfont icon-search"></i>
+			<input class="text-input" placeholder="Enter Key..." type="search">
+		</div>
+	</div>
+</form>
+	
+
+	
+		<!--侧边导航栏-->
+		<a id="nav-toggle" href="#"><span></span></a>
+
+<nav>
+	<div class="menu-top-container">
+		<ul id="menu-top" class="menu">
+			
+				
+				<li class="current-menu-item">
+					<a href="http://weibo.com/404nan/" target="_blank">Weibo</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="https://github.com/ql9075" target="_blank">github</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="https://www.zhihu.com/people/li-qs" target="_blank">zhihu</a>
+				</li>
+			
+		</ul>
+	</div>
+</nav>
+	
+
+</header>
+<div class="m-header ">
+	<section id="hero1" class="hero">
+		<div class="inner">
+		</div>
+	</section>
+	
+		<figure class="top-image" data-enable=true></figure>
+	
+</div>
+
+<!--文章列表-->
+<div class="wrapper">
+  
+    <!--文章-->
+<article>
+	
+  
+    <h1 class="post-title" itemprop="name">
+      js作用域链与闭包
+    </h1>
+  
+
+	<div class='post-body mb'>
+		<p>为了更好的学习和使用javascript,我们需要理解作用域链与闭包。</p>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p> 在javascript中，作用域可以看作是一套规则，这套规则用来管理引擎如何在当前作用域以及嵌套的子作用域中根据标识符（变量名或者函数名）名称进行变量查找</p>
+<p> js的执行 包括编译阶段和执行阶段，编译阶段由编译器完成，将代码翻译成可执行的代码，这个阶段作用域会确定。执行阶由引擎完成，段会利用 v8 等浏览器引擎执行，执行上下文在这个阶段完成。</p>
+<h4 id="编译阶段"><a href="#编译阶段" class="headerlink" title="编译阶段"></a>编译阶段</h4><ul>
+<li>词法分析</li>
+<li>语法分析</li>
+<li>可执行代码生成</li>
+<li>作用域规则确定</li>
+</ul>
+<h4 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h4><ul>
+<li>执行上下文创建</li>
+<li>代码执行</li>
+<li>垃圾回收</li>
+</ul>
+<h2 id="执行上下文生命周期"><a href="#执行上下文生命周期" class="headerlink" title="执行上下文生命周期"></a>执行上下文生命周期</h2><h4 id="创建阶段"><a href="#创建阶段" class="headerlink" title="创建阶段"></a>创建阶段</h4><ul>
+<li>生成变量对象</li>
+<li>建立作用域</li>
+<li>确定this指向</li>
+</ul>
+<h4 id="执行阶段-1"><a href="#执行阶段-1" class="headerlink" title="执行阶段"></a>执行阶段</h4><ul>
+<li>变量赋值</li>
+<li>函数引用</li>
+<li>执行其他代码</li>
+</ul>
+<p>为什么创建作用域是在编译阶段，而创建作用域链是在执行阶段呢？</p>
+<p>作用域与作用域链是两个不同的概念。<br>作用域是一套规则。<br>作用域链是这套规则的实现,它是由当前环境与上层环境的一系列变量和对象组成，它保证了当前执行环境对符合访问权的变量和函数的有序访问。</p>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>如果一个函数可以记住并访问所在的作用域（全局作用域除外），并在定义该函数作用域之外执行时 ,该函数可以称之为闭包。</p>
+<p>javascript拥有垃圾自动回收机制。其中一个重要的概念是，当一个值在内存中失去引用的时候，垃圾回收机制将会根据特殊的算法找到它，并回收掉，释放内存。</p>
+<p>正常函数的执行上下文，执行完毕后，生命周期结束，该函数的执行上下文失去引用，很快会被垃圾回收并释放内存。而闭包的存在，会阻止这个过程。</p>
+<p>通过闭包我们可以访问到函数内部的变量，这是闭包的一个特性。</p>
+<h4 id="应用场景："><a href="#应用场景：" class="headerlink" title="应用场景："></a>应用场景：</h4><ol>
+<li>延时设置setTimeout</li>
+<li>回调函数</li>
+<li>柯里化</li>
+<li>模块</li>
+</ol>
+
+	</div>
+	<div class="meta split">
+		<time class="post-date" datetime="2016-02-13T08:56:54.000Z" itemprop="datePublished">2016-02-13</time>
+	</div>
+</article>
+
+<!--评论-->
+
+
+	<div id="container-review" class="ds-thread" data-thread-key="js作用域链与闭包" data-title="js作用域链与闭包" data-url="http://404nan.github.io/2016/02/13/js作用域链与闭包/"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'ql9075',
+  repo: 'https://github.com/ql9075/review',
+  oauth: {
+    client_id: '7bbdeb4268137b926b33',
+    client_secret: '3b042edc3bee457c9b4706a1f3b5581af8983ae6',
+  },
+})
+gitment.render('container-review')
+</script>
+
+
+  
+</div>
+
+
+  <svg id="bigTriangleColor" width="100%" height="40" viewBox="0 0 100 102" preserveAspectRatio="none">
+    <path d="M0 0 L50 100 L100 0 Z"></path>
+  </svg>
+
+  
+
+
+  <div class="wrapper"></div>
+
+
+
+
+
+<div class="fat-footer">
+	<div class="wrapper">
+		<div class="layout layout--center">
+			<div class="layout__item palm-mb">
+				<div class="media">
+					<img class="headimg" src='https://avatars3.githubusercontent.com/u/1701645?v=3&amp;u=651d048a8abe584ec48fdcc3dede4a253472d612&amp;s=400' alt='404Nan'>
+					<div class="media__body">
+						<h4>let&#39;s go</h4>
+						<p class='site-description'>路一直都在</p>
+					</div>
+				</div>
+				<div class="author-contact">
+					<ul>
+						
+							
+							<li>
+				        		<a href="http://weibo.com/404nan" target="_blank">
+				        			
+				        				<i class="iconfont icon-weibo"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://github.com/ql9075" target="_blank">
+				        			
+				        				<i class="iconfont icon-github"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://www.zhihu.com/people/li-qs" target="_blank">
+				        			
+										<i class="iconfont icon-zhihu"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="footer" role="contentinfo">
+	<div class="wrapper wrapper--wide split split--responsive">
+		<span>Theme by <a href="http://github.com/yumemor">Yumemor</a>. Powered by <a href="http://hexo.io">Hexo</a></span>
+	</div>
+</footer>
+
+	<!-－这里导入了 lib.js 里面涵盖了 jQuery 等框架 所以注释掉-->
+	<!--<script src="http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js"></script>-->
+	<script src="/js/lib.js"></script>
+	<script src="/js/google-code-prettify/prettify.js"></script>
+	<script src="/js/module.js"></script>
+	<script src="/js/script.js"></script>
+	<script type='text/javascript'>
+		//代码高亮
+		$(document).ready(function(){
+	 		$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+   			prettyPrint();
+		});
+	</script>
+	</body>
+</html>
